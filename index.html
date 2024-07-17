@@ -41,7 +41,7 @@
         function carregarHino() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
-                    ABCJS.renderAbc("paper", httpRequest.responseText);
+                    ABCJS.renderAbc("paper", httpRequest.responseText, { responsive: "resize" });
                 } else {
                     alert("Não foi possível carregar o hino.");
                 }
