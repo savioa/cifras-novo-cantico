@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Novo Cântico - Cifras</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.4.1/abcjs-basic.js"></script>
+    <script>
+        function escolherHino() {
+            solicitarHino(`http://cdn.jsdelivr.net/gh/savioa/cifras-novo-cantico/abc/${this.value}.abc`);
+        }
+
+        function solicitarHino(url) {
+            if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+                httpRequest = new XMLHttpRequest();
+            } else if (window.ActiveXObject) { // IE
+                try {
+                    httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+                catch (e) {
+                    try {
+                        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    catch (e) { }
+                }
+            }
+
+            if (!httpRequest) {
+                alert("Não foi possível montar a requisição.");
+                return false;
+            }
+
+            httpRequest.onreadystatechange = carregarHino;
+            httpRequest.open("GET", url);
+            httpRequest.send();
+        }
+
+        function carregarHino() {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    ABCJS.renderAbc("paper", httpRequest.responseText);
+                } else {
+                    alert("Não foi possível carregar o hino.");
+                }
+            }
+        }
+
+    </script>
+</head>
+
+<body onload="document.getElementById('tune-selector').addEventListener('change', escolherHino);">
+    <div class="container">
+        <select id="tune-selector">
+            <option disabled selected value> -- Selecione um hino -- </option>
+            <optgroup label="Louvor e Adoração - Intróitos">
+                <option value="1">001 - Doxologia</option>
+                <option value="2">002 - Reverência</option>
+                <option value="3">003 - A igreja em adoração</option>
+            </optgroup>
+            <optgroup label="Ofertórios e Améns">
+                <option value="400b">400 B - Amém tríplice</option>
+                <option value="400c">400 C - Amém quádruplo</option>
+                <option value="400d">400 D - Amém sétuplo</option>
+            </optgroup>
+        </select>
+        <div id="paper"></div>
+    </div>
+</body>
+
+</html>
