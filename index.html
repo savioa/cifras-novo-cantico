@@ -11,10 +11,9 @@
     <script>
         var abc;
 
-        function load()
-        {
+        function load() {
             document.getElementById("tune-selector").addEventListener("change", escolherHino);
-            document.querySelector(".transpose-half-steps").addEventListener("change", transporHino)
+            document.getElementById("transpose-half-steps").addEventListener("change", transporHino)
         }
 
         function escolherHino() {
@@ -61,9 +60,8 @@
             ABCJS.renderAbc("paper", abc, { responsive: "resize", visualTranspose: transposicao });
         }
 
-        function transporHino()
-        {
-            desenharHino(abc, document.querySelector(".transpose-half-steps").value);
+        function transporHino() {
+            desenharHino(abc, document.getElementById("transpose-half-steps").value);
         }
     </script>
 </head>
@@ -83,7 +81,22 @@
                 <option value="400d">400 D - Amém sétuplo</option>
             </optgroup>
         </select>
-        <label>Transpor: <input class="transpose-half-steps" type="number" min="-24" max="24" step="1" value="0"></label>
+        <label>Transpor:
+            <select id="transpose-half-steps">
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0" selected>0</option>
+                <option value="-1">-1</option>
+                <option value="-2">-2</option>
+                <option value="-3">-3</option>
+                <option value="-4">-4</option>
+                <option value="-5">-5</option>
+            </select>
+        </label>
         <div id="paper"></div>
     </div>
 </body>
