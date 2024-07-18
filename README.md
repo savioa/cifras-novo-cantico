@@ -36,4 +36,4 @@ A - mém, A - mém, A____ - mém.
 
 # Colaboração
 
-Se você deseja colaborar neste projeto, veja as [diretrizes de colaboração](CONTRIBUTING.md).
+Você pode participar deste projeto [relatando erros e sugerindo funcionalidades](https://github.com/savioa/cifras-novo-cantico/issues).
