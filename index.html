@@ -5,19 +5,30 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="color-scheme" content="light dark">
     <title>Novo Cântico - Cifras</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.4.1/abcjs-basic.js"></script>
     <script>
         var abc;
 
         function load() {
-            document.getElementById("tune-selector").addEventListener("change", escolherHino);
-            document.getElementById("transpose-half-steps").addEventListener("change", transporHino)
+            document.getElementById("seletor-hino").addEventListener("change", escolherHino);
+            document.getElementById("seletor-transposicao").addEventListener("change", transporHino)
+            document.getElementById("seletor-formato").addEventListener("change", escolherHino)
         }
 
         function escolherHino() {
-            solicitarHino(`https://cdn.jsdelivr.net/gh/savioa/cifras-novo-cantico/abc/${this.value}.abc`);
+            let id = document.getElementById("seletor-hino").value;
+
+            if (id != "") {
+                if (document.getElementById("seletor-formato").value == "partitura") {
+                    solicitarHino(`https://cdn.jsdelivr.net/gh/savioa/cifras-novo-cantico/abc/${id}.abc`);
+                }
+                else {
+                    solicitarHino(`https://cdn.jsdelivr.net/gh/savioa/cifras-novo-cantico/txt/${id}.txt`);
+                }
+            }
         }
 
         function solicitarHino(url) {
@@ -48,8 +59,25 @@
         function carregarHino() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
-                    abc = httpRequest.responseText;
-                    desenharHino(abc, 0);
+                    if (document.getElementById("seletor-formato").value == "partitura") {
+                        document.getElementsByTagName("pre")[0].innerHTML = "";
+
+                        abc = httpRequest.responseText;
+                        desenharHino(abc, 0);
+
+                        document.getElementById("seletor-transposicao").removeAttribute("disabled");
+                    }
+                    else {
+                        document.getElementById("paper").remove();
+
+                        let div = document.createElement('div');
+                        div.setAttribute("id", "paper");
+                        document.getElementsByTagName("main")[0].append(div);
+
+                        document.getElementById("seletor-transposicao").setAttribute("disabled", "");
+
+                        document.getElementsByTagName("pre")[0].innerHTML = httpRequest.responseText;
+                    }
                 } else {
                     alert("Não foi possível carregar o hino.");
                 }
@@ -61,44 +89,59 @@
         }
 
         function transporHino() {
-            desenharHino(abc, document.getElementById("transpose-half-steps").value);
+            desenharHino(abc, document.getElementById("seletor-transposicao").value);
         }
     </script>
 </head>
 
 <body onload="load()">
-    <div class="container">
-        <select id="tune-selector">
-            <option disabled selected value> -- Selecione um hino -- </option>
-            <optgroup label="Louvor e Adoração - Intróitos">
-                <option value="1">001 - Doxologia</option>
-                <option value="2">002 - Reverência</option>
-                <option value="3">003 - A igreja em adoração</option>
-            </optgroup>
-            <optgroup label="Ofertórios e Améns">
-                <option value="400b">400 B - Amém tríplice</option>
-                <option value="400c">400 C - Amém quádruplo</option>
-                <option value="400d">400 D - Amém sétuplo</option>
-            </optgroup>
-        </select>
-        <label>Transpor:
-            <select id="transpose-half-steps">
-                <option value="6">6</option>
-                <option value="5">5</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1</option>
-                <option value="0" selected>0</option>
-                <option value="-1">-1</option>
-                <option value="-2">-2</option>
-                <option value="-3">-3</option>
-                <option value="-4">-4</option>
-                <option value="-5">-5</option>
-            </select>
-        </label>
+    <main class="container">
+        <form>
+            <fieldset class="grid">
+                <label>Hino
+                    <select id="seletor-hino">
+                        <option disabled selected value>--</option>
+                        <optgroup label="Louvor e Adoração - Intróitos">
+                            <option value="1">001 - Doxologia</option>
+                            <option value="2">002 - Reverência</option>
+                            <option value="3">003 - A igreja em adoração</option>
+                        </optgroup>
+                        <optgroup label="Ofertórios e Améns">
+                            <option value="400b">400 B - Amém tríplice</option>
+                            <option value="400c">400 C - Amém quádruplo</option>
+                            <option value="400d">400 D - Amém sétuplo</option>
+                        </optgroup>
+                    </select>
+                </label>
+            </fieldset>
+            <fieldset class="grid">
+                <label>Formato
+                    <select id="seletor-formato">
+                        <option value="partitura">Partitura</option>
+                        <option value="cifra">Cifra</option>
+                    </select>
+                </label>
+                <label>Transposição
+                    <select id="seletor-transposicao" disabled>
+                        <option value="6">+6 semitom</option>
+                        <option value="5">+5 semitom</option>
+                        <option value="4">+4 semitom</option>
+                        <option value="3">+3 semitom</option>
+                        <option value="2">+2 semitom</option>
+                        <option value="1">+1 semitom</option>
+                        <option value="0" selected>0</option>
+                        <option value="-1">-1 semitom</option>
+                        <option value="-2">-2 semitom</option>
+                        <option value="-3">-3 semitom</option>
+                        <option value="-4">-4 semitom</option>
+                        <option value="-5">-5 semitom</option>
+                    </select>
+                </label>
+            </fieldset>
+        </form>
         <div id="paper"></div>
-    </div>
+        <pre></pre>
+    </main>
 </body>
 
 </html>
