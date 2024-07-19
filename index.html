@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cifras do Novo Cântico</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.slate.min.css">
+    <style>
+        .abcjs-chord { color: crimson; }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.4.1/abcjs-basic.js"></script>
     <script>
         var abc;
@@ -89,7 +92,7 @@
         }
 
         function desenharHino(abc, transposicao) {
-            ABCJS.renderAbc("paper", abc, { responsive: "resize", visualTranspose: transposicao });
+            ABCJS.renderAbc("paper", abc, { add_classes: true, format: { stafftopmargin: "30", gchordfont: "sans-serif", vocalfont: "sans-serif 12", titlefont: "sans-serif 18", subtitlefont: "sans-serif" }, responsive: "resize", visualTranspose: transposicao });
         }
 
         function transporHino() {
