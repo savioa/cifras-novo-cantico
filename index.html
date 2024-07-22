@@ -8,7 +8,13 @@
     <title>Cifras do Novo Cântico</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.slate.min.css">
     <style>
-        .abcjs-chord { color: crimson; }
+        .abcjs-chord {
+            color: crimson;
+        }
+
+        .abcjs-container {
+            cursor: pointer;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.4.1/abcjs-basic.js"></script>
     <script>
@@ -16,8 +22,8 @@
 
         function load() {
             document.getElementById("seletor-hino").addEventListener("change", escolherHino);
-            document.getElementById("seletor-transposicao").addEventListener("change", transporHino)
-            document.getElementById("seletor-formato").addEventListener("change", escolherHino)
+            document.getElementById("seletor-transposicao").addEventListener("change", transporHino);
+            document.getElementById("seletor-formato").addEventListener("change", escolherHino);
         }
 
         function escolherHino() {
@@ -72,7 +78,7 @@
                         document.getElementById("paper").scrollIntoView({ behavior: "smooth" });
                     }
                     else {
-                        let div = document.createElement('div');
+                        let div = document.createElement("div");
                         div.setAttribute("id", "paper");
 
                         document.getElementById("paper").replaceWith(div);
@@ -93,6 +99,10 @@
 
         function desenharHino(abc, transposicao) {
             ABCJS.renderAbc("paper", abc, { add_classes: true, format: { stafftopmargin: "30", gchordfont: "sans-serif", vocalfont: "sans-serif 12", titlefont: "sans-serif 18", subtitlefont: "sans-serif" }, responsive: "resize", visualTranspose: transposicao });
+
+            let id = document.getElementById("seletor-hino").value;
+
+            document.getElementsByClassName("abcjs-container")[0].addEventListener("click", (e) => { window.open(`https://raw.githubusercontent.com/savioa/cifras-novo-cantico/main/abc/${id}.abc`) });
         }
 
         function transporHino() {
