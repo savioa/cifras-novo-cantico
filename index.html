@@ -18,6 +18,7 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.4.1/abcjs-basic.js"></script>
     <script>
+        var bases = ["Ab", "Bb", "Csharp", "Eb", "Fsharp", "A", "B", "C", "D", "E", "F", "G"];
         var abc;
 
         function load() {
@@ -67,6 +68,8 @@
         function carregarHino() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
+                    document.getElementById("acordes").innerHTML = "";
+
                     if (document.getElementById("seletor-formato").value == "partitura") {
                         document.getElementsByTagName("pre")[0].innerHTML = "";
 
@@ -103,6 +106,52 @@
             let id = document.getElementById("seletor-hino").value;
 
             document.getElementsByClassName("abcjs-container")[0].addEventListener("click", (e) => { window.open(`https://raw.githubusercontent.com/savioa/cifras-novo-cantico/main/abc/${id}.abc`) });
+
+            let acordes = [];
+
+            Array.from(document.getElementsByClassName("abcjs-chord")).forEach((e) => {
+                if (!acordes.includes(e.textContent)) {
+                    acordes.push(e.textContent);
+                }
+            });
+
+            acordes.forEach((acorde) => {
+                let acorde_esc = acorde
+                    .replace("♭", "b")
+                    .replace("♯", "sharp")
+                    .replace("/", "_")
+                    .replace("Db", "Csharp")
+                    .replace("Gsharp", "Ab");
+                let base = "";
+                let sufixo = "";
+
+                bases.forEach((b) => {
+                    if (base == "" && acorde_esc.startsWith(b)) {
+                        base = b;
+                        sufixo = acorde_esc.substring(b.length);
+
+                        if (sufixo == "") {
+                            sufixo = "major";
+                        } else if (sufixo == "m") {
+                            sufixo = "minor";
+                        }
+                    }
+                });
+
+                if (base == "") {
+                    alert(`Acorde ${acorde} não reconhecido.`);
+                    return false;
+                }
+
+                let div = document.createElement("div");
+                div.innerText = acorde;
+
+                let img = new Image();
+                img.src = `https://cdn.jsdelivr.net/gh/tombatossals/react-chords@gh-pages/media/guitar/chords/${base}/${sufixo}/1.png`
+                div.appendChild(img);
+
+                document.getElementById("acordes").appendChild(div);
+            });
         }
 
         function transporHino() {
@@ -165,6 +214,7 @@
             </fieldset>
         </form>
         <div id="paper"></div>
+        <div id="acordes" class="grid"></div>
         <pre></pre>
         <article>
             <a title="GitHub" href="https://github.com/savioa/cifras-novo-cantico">
