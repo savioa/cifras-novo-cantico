@@ -68,6 +68,8 @@
         function carregarHino() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
+                    document.getElementById("acordes").innerHTML = "";
+                    
                     if (document.getElementById("seletor-formato").value == "partitura") {
                         document.getElementsByTagName("pre")[0].innerHTML = "";
 
@@ -99,7 +101,6 @@
         }
 
         function desenharHino(abc, transposicao) {
-            document.getElementById("acordes").innerHTML = "";
 
             ABCJS.renderAbc("paper", abc, { add_classes: true, format: { stafftopmargin: "30", gchordfont: "sans-serif", vocalfont: "sans-serif 12", titlefont: "sans-serif 18", subtitlefont: "sans-serif" }, responsive: "resize", visualTranspose: transposicao });
 
