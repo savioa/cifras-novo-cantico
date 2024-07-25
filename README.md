@@ -5,7 +5,7 @@ Há na internet um arquivo com as cifras dos hinos do **Novo Cântico** que, por
 * posicionamento incorreto de acordes e
 * acordes incorretos.
 
-O propósito deste repositório é disponibilizar os hinos com cifras de forma estruturada e sem os problemas citados. O resultado pode ser visto [nesta página](https://savioa.github.io/cifras-novo-cantico/). Nela, cada hino disponível pode ser visto em formato de cifra simples ou de partitura com cifra (que permite transposição).
+O propósito deste repositório é disponibilizar os hinos com cifras de uma forma estruturada e que facilite a correção dos problemas citados. O resultado pode ser visto [nesta página](https://savioa.github.io/cifras-novo-cantico/). Nela, cada hino disponível pode ser visto em formato de cifra simples ou de partitura com cifra (que permite transposição).
 
 As referências usadas são o próprio [Hinário Novo Cântico com partituras](https://www.editoraculturacrista.com.br/hinario-novo-cantico-com-partitura-sem-cifras.html) e um conjunto de cadernos que a [Editora Cultura Cristã](https://www.editoraculturacrista.com.br/) publicou a partir de 2003 com “pautas dos hinos com melodias e cifras facilitadas para acompanhamento”.
 
@@ -30,8 +30,8 @@ w:A- mém, A- mém, A- ~ ~ ~ mém.
 ```
 400 A - Amém tríplice
 
-G   D    Em  Bm   C Am D7 G
-A - mém, A - mém, A____ - mém.
+G   D    Em   Bm   C Am D7   G
+A - mém, A_ - mém, A______ - mém.
 ```
 
 # Colaboração
