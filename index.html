@@ -155,14 +155,15 @@
                     return false;
                 }
 
-                let div = document.createElement("div");
-                div.innerText = acorde;
+                let span = document.createElement("span");
+                span.innerHTML = acorde;
 
                 let img = new Image();
                 img.src = `https://cdn.jsdelivr.net/gh/tombatossals/react-chords@gh-pages/media/guitar/chords/${base}/${sufixo}/1.png`
-                div.appendChild(img);
+                img.style = "max-width:100px;width:100%"
+                span.appendChild(img);
 
-                document.getElementById("acordes").appendChild(div);
+                document.getElementById("acordes").appendChild(span);
             });
         }
 
@@ -259,7 +260,7 @@
             </fieldset>
         </form>
         <div id="paper"></div>
-        <div id="acordes" class="grid"></div>
+        <div id="acordes"></div>
         <pre></pre>
         <hr>
         <p style="text-align: center;">Encontrou um erro? Por favor, <a
