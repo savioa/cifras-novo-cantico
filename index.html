@@ -30,11 +30,41 @@
     <script>
         var bases = ["Ab", "Bb", "Csharp", "Eb", "Fsharp", "A", "B", "C", "D", "E", "F", "G"];
         var abc;
+        var resultado;
+        var midiBuffer;
 
         function load() {
             document.getElementById("seletor-hino").addEventListener("change", escolherHino);
             document.getElementById("seletor-transposicao").addEventListener("change", transporHino);
             document.getElementById("seletor-formato").addEventListener("change", escolherHino);
+            document.getElementsByTagName("button")[0].addEventListener("click", function () { reproduzir(); });
+        }
+
+        function reproduzir() {
+            window.AudioContext = window.AudioContext ||
+                window.webkitAudioContext ||
+                navigator.mozAudioContext ||
+                navigator.msAudioContext;
+
+            let audioContext = new window.AudioContext();
+
+            audioContext.resume().then(function () {
+                midiBuffer = new ABCJS.synth.CreateSynth();
+
+                return midiBuffer.init({
+                    visualObj: resultado,
+                    audioContext: audioContext,
+                    millisecondsPerMeasure: resultado.millisecondsPerMeasure(),
+                    options: { chordsOff: true }
+                }).then(function (response) {
+                    return midiBuffer.prime();
+                }).then(function () {
+                    midiBuffer.start();
+                    return Promise.resolve();
+                }).catch(function (error) {
+                    console.warn("synth error", error);
+                });
+            });
         }
 
         function escolherHino() {
@@ -80,6 +110,12 @@
                 if (httpRequest.status === 200) {
                     document.getElementById("acordes").innerHTML = "";
 
+                    document.getElementsByTagName("button")[0].style.display = "none";
+
+                    if (midiBuffer) {
+                        midiBuffer.stop();
+                    }
+
                     if (document.getElementById("seletor-formato").value == "partitura") {
                         document.getElementsByTagName("pre")[0].innerHTML = "";
 
@@ -88,7 +124,7 @@
 
                         document.getElementById("seletor-transposicao").removeAttribute("disabled");
 
-                        document.getElementById("paper").scrollIntoView({ behavior: "smooth" });
+                        document.getElementsByTagName("button")[0].scrollIntoView({ behavior: "smooth" });
                     }
                     else {
                         let div = document.createElement("div");
@@ -111,12 +147,15 @@
         }
 
         function desenharHino(abc, transposicao) {
-
-            ABCJS.renderAbc("paper", abc, { add_classes: true, format: { stafftopmargin: "30", gchordfont: "sans-serif", vocalfont: "sans-serif 12", titlefont: "sans-serif 18", subtitlefont: "sans-serif" }, responsive: "resize", visualTranspose: transposicao });
+            resultado = ABCJS.renderAbc("paper", abc, { add_classes: true, format: { stafftopmargin: "30", gchordfont: "sans-serif", vocalfont: "sans-serif 12", titlefont: "sans-serif 18", subtitlefont: "sans-serif" }, responsive: "resize", visualTranspose: transposicao })[0];
 
             let id = document.getElementById("seletor-hino").value;
 
             document.getElementsByClassName("abcjs-container")[0].addEventListener("click", (e) => { window.open(`https://raw.githubusercontent.com/savioa/cifras-novo-cantico/main/abc/${id}.abc`) });
+
+            if (ABCJS.synth.supportsAudio()) {
+                document.getElementsByTagName("button")[0].style.display = "inline-block";
+            }
 
             let acordes = [];
 
@@ -269,6 +308,7 @@
                 </label>
             </fieldset>
         </form>
+        <button style="display: none;">Reproduzir</button>
         <div id="paper"></div>
         <div id="acordes"></div>
         <pre></pre>
