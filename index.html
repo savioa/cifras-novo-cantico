@@ -37,10 +37,10 @@
             document.getElementById("seletor-hino").addEventListener("change", escolherHino);
             document.getElementById("seletor-transposicao").addEventListener("change", transporHino);
             document.getElementById("seletor-formato").addEventListener("change", escolherHino);
-            document.getElementsByTagName("button")[0].addEventListener("click", function () { reproduzir(); });
+            document.getElementsByTagName("button")[0].addEventListener("click", function () { reproduzirMusica(); });
         }
 
-        function reproduzir() {
+        function reproduzirMusica() {
             window.AudioContext = window.AudioContext ||
                 window.webkitAudioContext ||
                 navigator.mozAudioContext ||
@@ -55,7 +55,7 @@
                     visualObj: resultado,
                     audioContext: audioContext,
                     millisecondsPerMeasure: resultado.millisecondsPerMeasure(),
-                    options: { chordsOff: true }
+                    options: { chordsOff: true, midiTranspose: document.getElementById("seletor-transposicao").value, }
                 }).then(function (response) {
                     return midiBuffer.prime();
                 }).then(function () {
@@ -65,6 +65,14 @@
                     console.warn("synth error", error);
                 });
             });
+        }
+
+        function pararMusica() {
+            document.getElementsByTagName("button")[0].style.display = "none";
+
+            if (midiBuffer) {
+                midiBuffer.stop();
+            }
         }
 
         function escolherHino() {
@@ -110,11 +118,7 @@
                 if (httpRequest.status === 200) {
                     document.getElementById("acordes").innerHTML = "";
 
-                    document.getElementsByTagName("button")[0].style.display = "none";
-
-                    if (midiBuffer) {
-                        midiBuffer.stop();
-                    }
+                    pararMusica();
 
                     if (document.getElementById("seletor-formato").value == "partitura") {
                         document.getElementsByTagName("pre")[0].innerHTML = "";
@@ -208,6 +212,8 @@
 
         function transporHino() {
             document.getElementById("acordes").innerHTML = "";
+
+            pararMusica();
 
             desenharHino(abc, document.getElementById("seletor-transposicao").value);
         }
