@@ -41,6 +41,10 @@
         }
 
         function reproduzirMusica() {
+            pararMusica();
+
+            document.getElementsByTagName("button")[0].style.display = "inline-block";
+            
             window.AudioContext = window.AudioContext ||
                 window.webkitAudioContext ||
                 navigator.mozAudioContext ||
